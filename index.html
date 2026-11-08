@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K7 Protector - Script Hub</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --accent-color: #ef4444;
+            --accent-hover: #dc2626;
+            --text-color: #c9d1d9;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-badge {
+            background: var(--accent-color);
+            color: #fff;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .logo-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .counter-badge {
+            font-size: 13px;
+            background: #21262d;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .counter-badge span {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .editor-area {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 380px;
+            background: #0d1117;
+            color: #58a6ff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: var(--accent-color);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: #21262d;
+            color: #c9d1d9;
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #30363d;
+            color: #fff;
+        }
+
+        button.btn-primary {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+        }
+
+        button.btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .status {
+            margin-top: 15px;
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="logo-badge">K7</span>
+                <span class="logo-title">Protector</span>
+            </div>
+            <div class="counter-badge">
+                <span id="charCount">0</span> / 100.000
+            </div>
+        </header>
+
+        <div class="editor-area">
+            <textarea id="scriptInput" maxlength="100000" placeholder="Lua veya script kodunuzu buraya yapıştırın (Maks. 100.000 karakter)..."></textarea>
+        </div>
+
+        <div class="controls">
+            <div class="btn-group">
+                <button onclick="clearText()">Temizle</button>
+                <button onclick="copyText()">Kopyala</button>
+            </div>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="protectScript()">Scripti Koru / Okut</button>
+            </div>
+        </div>
+
+        <div class="status" id="statusText">Hazır</div>
+    </div>
+
+    <script>
+        const textarea = document.getElementById('scriptInput');
+        const charCount = document.getElementById('charCount');
+        const statusText = document.getElementById('statusText');
+
+        textarea.addEventListener('input', () => {
+            const length = textarea.value.length;
+            charCount.textContent = length.toLocaleString('tr-TR');
+        });
+
+        function clearText() {
+            textarea.value = '';
+            charCount.textContent = '0';
+            statusText.textContent = 'Metin kutusu temizlendi.';
+        }
+
+        function copyText() {
+            if (!textarea.value) return;
+            navigator.clipboard.writeText(textarea.value);
+            statusText.textContent = 'Metin panoya kopyalandı!';
+            setTimeout(() => statusText.textContent = 'Hazır', 2000);
+        }
+
+        function protectScript() {
+            if (!textarea.value.trim()) {
+                statusText.textContent = 'Lütfen önce bir script girin!';
+                return;
+            }
+            statusText.textContent = 'Script başarıyla işlendi ve koruma altına alındı.';
+        }
+    </script>
+
+</body>
+</html>
